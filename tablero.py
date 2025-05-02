@@ -8,3 +8,16 @@ def inicializar_tablero():
     tablero[7][0] = tablero[7][7] = "t"  # Torres negras
 
     return tablero
+
+def mostrar_tablero(tablero):
+    print("    " + "   ".join(str(i+1) for i in range(8)))
+    print("  +" + "---+" * 8)
+    for i, fila in enumerate(tablero):
+        fila_str = f"{i+1} |"
+        for celda in fila:
+            if celda is None:
+                fila_str += "   |"
+            else:
+                fila_str += f" {celda} |"
+        print(fila_str)
+        print("  +" + "---+" * 8)
