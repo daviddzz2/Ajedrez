@@ -168,5 +168,43 @@ def main():
         except Exception as e:
             print("Entrada inválida. Usa formato fila,col (por ejemplo: 1,0).")
 
+def encontrar_rey(tablero, es_blancas): #Encuentra la pieza del rey en el tablero
+    rey = 'K' if es_blancas else 'k'
+    for i in range(8):
+        for j in range(8):
+            if tablero[i][j] == rey:
+                return (i, j)
+    return None
+
+def en_jaque(tablero, es_blancas): #Comprueba si el rey está en posición de jaque
+    rey_pos = encontrar_rey(tablero, es_blancas)
+    if not rey_pos:
+        return False
+
+    for i in range(8):
+        for j in range(8):
+            pieza = tablero[i][j]
+            if pieza is not None and pieza.islower() != es_blancas:
+                if es_movimiento_valido(pieza, (i, j), rey_pos, tablero):
+                    return True
+    return False
+import copy
+
+def hay_movimientos_legales(tablero, es_blancas): #Comprueba si hay algún moviemiento legal para que el rey no se encuentre en jaque
+    for i in range(8):
+        for j in range(8):
+            pieza = tablero[i][j]
+            if pieza is not None and pieza.isupper() == es_blancas:
+                for x in range(8):
+                    for y in range(8):
+                        destino = (x, y)
+                        if es_movimiento_valido(pieza, (i, j), destino, tablero):
+                            copia = copy.deepcopy(tablero)
+                            copia[x][y] = pieza
+                            copia[i][j] = None
+                            if not en_jaque(copia, es_blancas):
+                                return True
+    return False
+
 if __name__ == "__main__":
     main()
