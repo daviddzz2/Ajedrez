@@ -85,7 +85,38 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
         destino_pieza = tablero[fila_destino][col_destino]
         if destino_pieza is None or destino_pieza.islower() != pieza.islower():
             return True
+        
+    # Movimiento de Caballo
+    elif pieza.lower() == 'c':
+        if (abs(dy), abs(dx)) in [(2, 1), (1, 2)]:
+            destino_pieza = tablero[fila_destino][col_destino]
+            return destino_pieza is None or destino_pieza.islower() != pieza.islower()
+        return False
 
+    # Movimiento de Alfil
+    elif pieza.lower() == 'a':
+        if abs(dy) != abs(dx):
+            return False
+        paso_y = 1 if dy > 0 else -1
+        paso_x = 1 if dx > 0 else -1
+        for i in range(1, abs(dy)):
+            if tablero[fila_origen + i * paso_y][col_origen + i * paso_x] is not None:
+                return False
+        destino_pieza = tablero[fila_destino][col_destino]
+        return destino_pieza is None or destino_pieza.islower() != pieza.islower()
+
+    # Movimiento de Reina
+    elif pieza.lower() == 'q':
+        return es_movimiento_valido('t' if pieza.islower() else 'T', origen, destino, tablero) or \
+               es_movimiento_valido('a' if pieza.islower() else 'A', origen, destino, tablero)
+
+    # Movimiento de Rey
+    elif pieza.lower() == 'k':
+        if abs(dy) <= 1 and abs(dx) <= 1:
+            destino_pieza = tablero[fila_destino][col_destino]
+            return destino_pieza is None or destino_pieza.islower() != pieza.islower()
+        return False
+    
     return False
 
 def mover_pieza(tablero, pieza, origen, destino, turno_blancas):
