@@ -8,14 +8,14 @@ def inicializar_tablero():
         tablero[1][i] = "P"  # Peones blancos
         tablero[6][i] = "p"  # Peones negros
 
-    tablero[0][0] = tablero[0][7] = "T"  # Torres blancas
-    tablero[7][0] = tablero[7][7] = "t"  # Torres negras
+    tablero[0][0] = tablero[0][7] = "R"  # Torres blancas
+    tablero[7][0] = tablero[7][7] = "r"  # Torres negras
 
-    tablero[0][1] = tablero[0][6] = "C"  # Caballos blancos
-    tablero[7][1] = tablero[7][6] = "c"  # Caballos negros
+    tablero[0][1] = tablero[0][6] = "N"  # Caballos blancos
+    tablero[7][1] = tablero[7][6] = "n"  # Caballos negros
 
-    tablero[0][2] = tablero[0][5] = "A"  # Alfiles blancos
-    tablero[7][2] = tablero[7][5] = "a"  # Alfiles negros
+    tablero[0][2] = tablero[0][5] = "B"  # Alfiles blancos
+    tablero[7][2] = tablero[7][5] = "b"  # Alfiles negros
 
     tablero[0][3] = "Q"  # Dama blanca
     tablero[7][3] = "q"  # Dama negra
@@ -64,7 +64,7 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
         return False
 
     # Movimiento de Torre
-    elif pieza.lower() == 't':
+    elif pieza.lower() == 'r':
         if dy != 0 and dx != 0:
             return False  # Solo se mueve en línea recta
 
@@ -87,14 +87,14 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
             return True
         
     # Movimiento de Caballo
-    elif pieza.lower() == 'c':
+    elif pieza.lower() == 'n':
         if (abs(dy), abs(dx)) in [(2, 1), (1, 2)]:
             destino_pieza = tablero[fila_destino][col_destino]
             return destino_pieza is None or destino_pieza.islower() != pieza.islower()
         return False
 
     # Movimiento de Alfil
-    elif pieza.lower() == 'a':
+    elif pieza.lower() == 'b':
         if abs(dy) != abs(dx):
             return False
         paso_y = 1 if dy > 0 else -1
@@ -107,8 +107,8 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
 
     # Movimiento de Reina
     elif pieza.lower() == 'q':
-        return es_movimiento_valido('t' if pieza.islower() else 'T', origen, destino, tablero) or \
-               es_movimiento_valido('a' if pieza.islower() else 'A', origen, destino, tablero)
+        return es_movimiento_valido('t' if pieza.islower() else 'R', origen, destino, tablero) or \
+               es_movimiento_valido('a' if pieza.islower() else 'B', origen, destino, tablero)
 
     # Movimiento de Rey
     elif pieza.lower() == 'k':
@@ -136,7 +136,7 @@ def main():
     tablero = inicializar_tablero()
     turno_blancas = True  # Alternar entre jugadores
 
-    print("Bienvenido al juego de Ajedrez!!")
+    print("¡Bienvenido al juego de Ajedrez!")
 
     while True:
         mostrar_tablero(tablero)
