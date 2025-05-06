@@ -24,18 +24,50 @@ def inicializar_tablero():
     return tablero
 
 def mostrar_tablero(tablero):
-    print("\n" + " " * 9 + "TABLERO DE AJEDREZ")
     print("\n    " + "   ".join(str(i+1) for i in range(8)))
     print("  +" + "---+" * 8)
     for i, fila in enumerate(tablero):
         fila_str = f"{i+1} |"
         for celda in fila:
-            if celda is None:
-                fila_str += "   |"
-            else:
-                fila_str += f" {celda} |"
+            fila_str += f" {celda if celda else ' '} |"
         print(fila_str)
         print("  +" + "---+" * 8)
+
+def encontrar_rey(tablero, es_blancas): #Encuentra la pieza del rey en el tablero
+    rey = 'K' if es_blancas else 'k'
+    for i in range(8):
+        for j in range(8):
+            if tablero[i][j] == rey:
+                return (i, j)
+    return None
+
+def en_jaque(tablero, es_blancas): #Comprueba si el rey se encuentra en jaque
+    rey_pos = encontrar_rey(tablero, es_blancas)
+    if not rey_pos:
+        return False
+
+    for i in range(8):
+        for j in range(8):
+            pieza = tablero[i][j]
+            if pieza and pieza.isupper() != es_blancas:
+                if es_movimiento_valido(pieza, (i, j), rey_pos, tablero):
+                    return True
+    return False
+
+def hay_movimientos_legales(tablero, es_blancas):
+    for i in range(8):
+        for j in range(8):
+            pieza = tablero[i][j]
+            if pieza and pieza.isupper() == es_blancas:
+                for x in range(8):
+                    for y in range(8):
+                        if es_movimiento_valido(pieza, (i, j), (x, y), tablero):
+                            copia = copy.deepcopy(tablero)
+                            copia[x][y] = pieza
+                            copia[i][j] = None
+                            if not en_jaque(copia, es_blancas):
+                                return True
+    return False
 
 def es_movimiento_valido(pieza, origen, destino, tablero):
     fila_origen, col_origen = origen
@@ -117,91 +149,62 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
 
     return False
 
-def mover_pieza(tablero, pieza, origen, destino, turno_blancas):
-    fila_origen, col_origen = origen
-    fila_destino, col_destino = destino
-
-    if es_movimiento_valido(pieza, origen, destino, tablero):
-        tablero[fila_destino][col_destino] = pieza
-        tablero[fila_origen][col_origen] = None
-        print(f"Movimiento realizado: has movido la pieza {pieza}")
-        return not turno_blancas  # Cambiar turno
-    else:
+def mover_pieza(tablero, origen, destino, turno_blancas):
+    pieza = tablero[origen[0]][origen[1]]
+    if not es_movimiento_valido(pieza, origen, destino, tablero):
         print("Movimiento no válido.")
-        return turno_blancas
-
-def encontrar_rey(tablero, turno_blancas): #Encuentra la pieza del rey en el tablero
-    rey = 'K' if turno_blancas else 'k'
-    for i in range(8):
-        for j in range(8):
-            if tablero[i][j] == rey:
-                return (i, j)
-    return None
-
-def en_jaque(tablero, turno_blancas): #Comprueba si el rey está en posición de jaque
-    rey_pos = encontrar_rey(tablero, turno_blancas)
-    if not rey_pos:
         return False
 
-    for i in range(8):
-        for j in range(8):
-            pieza = tablero[i][j]
-            if pieza is not None and pieza.islower() != turno_blancas:
-                if es_movimiento_valido(pieza, (i, j), rey_pos, tablero):
-                    return True
-    return False
+    copia = copy.deepcopy(tablero)
+    copia[destino[0]][destino[1]] = pieza
+    copia[origen[0]][origen[1]] = None
 
-def hay_movimientos_legales(tablero, turno_blancas): #Comprueba si hay algún movimiento legal para que el rey no se encuentre en jaque
-    for i in range(8):
-        for j in range(8):
-            pieza = tablero[i][j]
-            if pieza is not None and pieza.isupper() == turno_blancas:
-                for x in range(8):
-                    for y in range(8):
-                        destino = (x, y)
-                        if es_movimiento_valido(pieza, (i, j), destino, tablero):
-                            copia = copy.deepcopy(tablero)
-                            copia[x][y] = pieza
-                            copia[i][j] = None
-                            if not en_jaque(copia, turno_blancas):
-                                return True
-    return False
+    if en_jaque(copia, turno_blancas):
+        print("No puedes hacer ese movimiento, dejarías a tu rey en jaque.")
+        return False
+
+    tablero[destino[0]][destino[1]] = pieza
+    tablero[origen[0]][origen[1]] = None
+    return True
 
 def main():
     tablero = inicializar_tablero()
-    turno_blancas = True  # Alternar entre jugadores
-
-    print("¡Bienvenido al juego de Ajedrez!")
+    turno_blancas = True
 
     while True:
         mostrar_tablero(tablero)
-        print("Turno de las piezas blancas (mayúsculas)." if turno_blancas else "Turno de las piezas negras (minúsculas).")
+        if en_jaque(tablero, turno_blancas):
+            if not hay_movimientos_legales(tablero, turno_blancas):
+                print("Jaque mate. Ganan las " + ("negras" if turno_blancas else "blancas"))
+                break
+            else:
+                print("¡Estás en jaque!")
+        elif not hay_movimientos_legales(tablero, turno_blancas):
+            print("Tablas por ahogado.")
+            break
+
+        print("Turno de las " + ("blancas" if turno_blancas else "negras"))
+        origen = input("Origen (fila,col) o 'salir': ")
+        if origen.lower() == 'salir':
+            break
+        destino = input("Destino (fila,col): ")
 
         try:
-            if en_jaque(tablero, turno_blancas):
-                if not hay_movimientos_legales(tablero, turno_blancas):
-                    print("¡Jaque mate! Las piezas", "negras" if turno_blancas else "blancas", "ganan.")
-                    break
-                else:
-                    print("¡Jaque!")
-
-            origen = input("Ingresa la posición inicial (fila,col) o 'salir': ")
-            if origen.lower() == 'salir':
-                break
-            destino = input("Ingresa la posición final (fila,col): ")
-
             origen = tuple(map(lambda x: int(x) - 1, origen.split(",")))
             destino = tuple(map(lambda x: int(x) - 1, destino.split(",")))
 
             pieza = tablero[origen[0]][origen[1]]
-            if pieza is None:
+            if not pieza:
                 print("No hay pieza en esa posición.")
                 continue
+            if pieza.isupper() != turno_blancas:
+                print("Esa pieza no te pertenece.")
+                continue
 
-            turno_blancas = mover_pieza(tablero, pieza, origen, destino, turno_blancas)
-
-        except Exception as e:
-            print("Entrada inválida. Usa formato fila,col (por ejemplo: 1,0).")
+            if mover_pieza(tablero, origen, destino, turno_blancas):
+                turno_blancas = not turno_blancas
+        except:
+            print("Entrada inválida. Usa el formato fila,col (por ejemplo: 2,1).")
 
 if __name__ == "__main__":
     main()
