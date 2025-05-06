@@ -1,20 +1,19 @@
 # Ajedrez
 # Gestión de Partidas de Ajedrez
 
-Este proyecto implementa un sistema en Python para la gestión de partidas de ajedrez, con funcionalidades para registrar jugadores, guardar partidas, y consultar estadísticas, utilizando estructuras de datos como listas enlazadas y árboles binarios de búsqueda (ABB).
+Este proyecto implementa un sistema en Python para la gestión de partidas de ajedrez y simular el movimiento de las piezas en el tablero.
 
 ## Funcionalidades principales
 
-- **Registro de jugadores**: Se pueden agregar nuevos jugadores y almacenar sus estadísticas (victorias, derrotas, empates).
-- **Registro de partidas**: Permite registrar partidas entre jugadores, incluyendo fecha y resultado.
-- **Consulta de jugadores**: Visualiza información detallada de cada jugador.
-- **Consulta de partidas**: Muestra todas las partidas registradas.
-- **Estadísticas individuales y comparativas**: Permite ver el rendimiento de un jugador y el historial entre dos jugadores específicos.
+- **Cambio de turno**: Permitimos el cambio de fichas blancas a fichas negras cuando acabe el turno correspondiente.
+- **Movimiento de las piezas**: Se pueden mover todas las piezas del tablero.
+- **Captura de las piezas**: Las piezas desaparecen del tablero cuando son capturadas por otras del color contrario.
+- **Lógica de jaque y jaque-mate**: Implementamos estos conceptos característicos del ajedrez.
 
 ## Estructuras de datos utilizadas
 
-- **Lista enlazada doble**: Para almacenar las partidas en orden cronológico.
-- **Árbol binario de búsqueda (ABB)**: Para almacenar jugadores ordenados por nombre, permitiendo búsquedas eficientes.
+- **Matriz bidimensional 8x8**: Simula el tamaño del tablero con sus 64 casillas.
+- **Lista**: Cada fila es una lista que almacena las piezas que se encuentran en ella.
 
 ## Requisitos
 
