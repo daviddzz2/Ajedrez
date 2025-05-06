@@ -60,7 +60,7 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
             destino_pieza = tablero[fila_destino][col_destino]
             if destino_pieza is not None and destino_pieza.islower() != pieza.islower():
                 return True
-        # Captura (no implementada aún)
+
         return False
 
     # Movimiento de Torre
@@ -85,7 +85,7 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
         destino_pieza = tablero[fila_destino][col_destino]
         if destino_pieza is None or destino_pieza.islower() != pieza.islower():
             return True
-        
+
     # Movimiento de Caballo
     elif pieza.lower() == 'c':
         if (abs(dy), abs(dx)) in [(2, 1), (1, 2)]:
@@ -116,7 +116,7 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
             destino_pieza = tablero[fila_destino][col_destino]
             return destino_pieza is None or destino_pieza.islower() != pieza.islower()
         return False
-    
+
     return False
 
 def mover_pieza(tablero, pieza, origen, destino, turno_blancas):
