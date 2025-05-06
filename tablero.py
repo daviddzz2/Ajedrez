@@ -137,8 +137,8 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
 
     # Movimiento de Reina
     elif pieza.lower() == 'q':
-        return es_movimiento_valido('t' if pieza.islower() else 'R', origen, destino, tablero) or \
-               es_movimiento_valido('a' if pieza.islower() else 'B', origen, destino, tablero)
+        return es_movimiento_valido('r' if pieza.islower() else 'R', origen, destino, tablero) or \
+               es_movimiento_valido('b' if pieza.islower() else 'B', origen, destino, tablero)
 
     # Movimiento de Rey
     elif pieza.lower() == 'k':
