@@ -1,5 +1,5 @@
 # Ajedrez
-# Gestión de Partidas de Ajedrez
+# Gestión de Partidas de Ajedrez con Tableros y Movimientos
 
 Este proyecto implementa un sistema en Python para la gestión de partidas de ajedrez y simular el movimiento de las piezas en el tablero.
 
@@ -14,6 +14,7 @@ Este proyecto implementa un sistema en Python para la gestión de partidas de aj
 
 - **Matriz bidimensional 8x8**: Simula el tamaño del tablero con sus 64 casillas.
 - **Lista**: Cada fila es una lista que almacena las piezas que se encuentran en ella.
+- **Tupla**: Almacena las coordenadas de la casilla origen y de la casilla destino. 
 
 ## Requisitos
 
