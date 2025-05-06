@@ -1,6 +1,4 @@
-# De momento solo se pueden mover peones y torres
-# Hay que implementar el movimiento de las demás piezas y la captura de piezas
-# También hay que implementar la lógica de jaque y jaque mate
+import copy
 
 def inicializar_tablero():
     tablero = [[None for i in range(8)] for i in range(8)]
@@ -188,7 +186,6 @@ def en_jaque(tablero, es_blancas): #Comprueba si el rey está en posición de ja
                 if es_movimiento_valido(pieza, (i, j), rey_pos, tablero):
                     return True
     return False
-import copy
 
 def hay_movimientos_legales(tablero, es_blancas): #Comprueba si hay algún moviemiento legal para que el rey no se encuentre en jaque
     for i in range(8):
