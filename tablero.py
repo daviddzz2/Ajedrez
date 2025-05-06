@@ -115,6 +115,12 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
             return destino_pieza is None or destino_pieza.islower() != pieza.islower()
         return False
 
+    copia_tablero = copy.deepcopy(tablero)
+    copia_tablero[fila_destino][col_destino] = pieza
+    copia_tablero[fila_origen][col_origen] = None
+    if en_jaque(copia_tablero, pieza.isupper()):
+        return False
+
     return False
 
 def mover_pieza(tablero, pieza, origen, destino, turno_blancas):
@@ -129,42 +135,6 @@ def mover_pieza(tablero, pieza, origen, destino, turno_blancas):
     else:
         print("Movimiento no válido.")
         return turno_blancas
-
-def main():
-    tablero = inicializar_tablero()
-    turno_blancas = True  # Alternar entre jugadores
-
-    print("¡Bienvenido al juego de Ajedrez!")
-
-    while True:
-        mostrar_tablero(tablero)
-        print("Turno de las piezas blancas (mayúsculas)." if turno_blancas else "Turno de las piezas negras (minúsculas).")
-
-        try:
-            origen = input("Ingresa la posición inicial (fila,col) o 'salir': ")
-            if origen.lower() == 'salir':
-                break
-            destino = input("Ingresa la posición final (fila,col): ")
-
-            origen = tuple(map(lambda x: int(x) - 1, origen.split(",")))
-            destino = tuple(map(lambda x: int(x) - 1, destino.split(",")))
-
-            pieza = tablero[origen[0]][origen[1]]
-            if pieza is None:
-                print("No hay pieza en esa posición.")
-                continue
-
-            if turno_blancas and not pieza.isupper():
-                print("Es turno de las piezas blancas.")
-                continue
-            elif not turno_blancas and not pieza.islower():
-                print("Es turno de las piezas negras.")
-                continue
-
-            turno_blancas = mover_pieza(tablero, pieza, origen, destino, turno_blancas)
-
-        except Exception as e:
-            print("Entrada inválida. Usa formato fila,col (por ejemplo: 1,0).")
 
 def encontrar_rey(tablero, es_blancas): #Encuentra la pieza del rey en el tablero
     rey = 'K' if es_blancas else 'k'
@@ -202,6 +172,49 @@ def hay_movimientos_legales(tablero, es_blancas): #Comprueba si hay algún movie
                             if not en_jaque(copia, es_blancas):
                                 return True
     return False
+
+def main():
+    tablero = inicializar_tablero()
+    turno_blancas = True  # Alternar entre jugadores
+
+    print("¡Bienvenido al juego de Ajedrez!")
+
+    while True:
+        mostrar_tablero(tablero)
+        print("Turno de las piezas blancas (mayúsculas)." if turno_blancas else "Turno de las piezas negras (minúsculas).")
+
+        try:
+            if en_jaque(tablero, turno_blancas):
+                if not hay_movimientos_legales(tablero, turno_blancas):
+                    print("¡Jaque mate! Las piezas", "negras" if turno_blancas else "blancas", "ganan.")
+                    break
+                else:
+                    print("¡Jaque!")
+
+            origen = input("Ingresa la posición inicial (fila,col) o 'salir': ")
+            if origen.lower() == 'salir':
+                break
+            destino = input("Ingresa la posición final (fila,col): ")
+
+            origen = tuple(map(lambda x: int(x) - 1, origen.split(",")))
+            destino = tuple(map(lambda x: int(x) - 1, destino.split(",")))
+
+            pieza = tablero[origen[0]][origen[1]]
+            if pieza is None:
+                print("No hay pieza en esa posición.")
+                continue
+
+            if turno_blancas and not pieza.isupper():
+                print("Es turno de las piezas blancas.")
+                continue
+            elif not turno_blancas and not pieza.islower():
+                print("Es turno de las piezas negras.")
+                continue
+
+            turno_blancas = mover_pieza(tablero, pieza, origen, destino, turno_blancas)
+
+        except Exception as e:
+            print("Entrada inválida. Usa formato fila,col (por ejemplo: 1,0).")
 
 if __name__ == "__main__":
     main()
