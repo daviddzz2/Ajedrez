@@ -9,8 +9,8 @@ def inicializar_tablero():
     tablero[0][0] = tablero[0][7] = "R"  # Torres blancas
     tablero[7][0] = tablero[7][7] = "r"  # Torres negras
 
-    tablero[0][1] = tablero[0][6] = "N"  # Caballos blancos
-    tablero[7][1] = tablero[7][6] = "n"  # Caballos negros
+    tablero[0][1] = tablero[0][6] = "C"  # Caballos blancos
+    tablero[7][1] = tablero[7][6] = "c"  # Caballos negros
 
     tablero[0][2] = tablero[0][5] = "B"  # Alfiles blancos
     tablero[7][2] = tablero[7][5] = "b"  # Alfiles negros
@@ -117,7 +117,7 @@ def es_movimiento_valido(pieza, origen, destino, tablero):
             return True
 
     # Movimiento de Caballo
-    elif pieza.lower() == 'n':
+    elif pieza.lower() == 'c':
         if (abs(dy), abs(dx)) in [(2, 1), (1, 2)]:
             destino_pieza = tablero[fila_destino][col_destino]
             return destino_pieza is None or destino_pieza.islower() != pieza.islower()
