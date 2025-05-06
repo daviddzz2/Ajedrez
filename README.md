@@ -1,5 +1,3 @@
-# Ajedrez
-
 # Gestión de Partidas de Ajedrez con Tableros y Movimientos
 
 Este proyecto implementa un sistema en Python para la gestión de partidas de ajedrez y simular el movimiento de las piezas en el tablero.
